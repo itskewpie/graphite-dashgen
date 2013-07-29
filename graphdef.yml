@@ -1,7 +1,7 @@
 # summary
 cnodes_load:
     target:
-    - 'collectd.cnode*-m.{domain}.load.load.shortterm'
+    - 'collectd.cnode*-m_{domain}.load.load.shortterm'
 
 cnodes_cpu_idle:
     target:
@@ -51,7 +51,7 @@ cnodes_sda_disk_ops_write:
 
 snodes_load:
     target:
-    - 'collectd.snode*-m.{domain}.load.load.shortterm'
+    - 'collectd.snode*-m_{domain}.load.load.shortterm'
 
 snodes_cpu_idle:
     target:
@@ -81,7 +81,7 @@ snodes_drbd0_disk_ops_write:
 
 mnodes_load:
     target:
-    - 'collectd.mnode*-m.{domain}.load.load.shortterm'
+    - 'collectd.mnode*-m_{domain}.load.load.shortterm'
 
 mnodes_cpu_idle:
     target:
@@ -118,8 +118,8 @@ mnodes_sda_disk_ops_write:
 # cnode01
 cnode01_load:
     target:
-    - 'collectd.cnode01-m.{domain}.load.load.*'
+    - 'collectd.cnode01-m_{domain}.load.load.*'
 
 snode01_load:
     target:
-    - 'collectd.snode01-m.{domain}.load.load.*'
+    - 'collectd.snode01-m_{domain}.load.load.*'
