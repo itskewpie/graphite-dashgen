@@ -28,35 +28,38 @@ log.handlers = list()
 log.addHandler(screenhdlr)
 
 
-def dash_create(host, host_path, profile):
+def dash_create():
     """Create dashboard for specified host and dashboard profile."""
     defaults = dashconf['defaults']
     today = date.today().strftime('%FT%T')
-    dash_name = "%s_%s" % (host, profile)
-    log.info("Dashboard: %s" % dash_name)
+    dash_names = dashdef.keys()
+    log.info("Dashboards %s" % dash_names)
 
+    dashs = list()
     # dashboard
-    dash = {'name': dash_name,
-            'defaultGraphParams': {
-                'width': defaults['width'],
-                'height': defaults['height'],
-                'from': '-%s%s' % (defaults['quantity'], defaults['units']),
-                'until': defaults['until'],
-                'format': defaults['format'],
-            },
-            'refreshConfig': {
-                'interval': defaults['interval'],
-                'enabled': defaults['enabled'],
-            },
-            'graphs': list(),
-            'timeConfig': {
-                'startDate': today,
-                'endDate': today,
-                'startTime': defaults['startTime'],
-                'endTime': defaults['endTime'],
-                'quantity': defaults['quantity'],
-                'type': defaults['type'],
-                'units': defaults['units'],
+    for dash_name in dash_names:
+        log.info("Dashboard %s" % dash_name)
+        dash = {'name': dash_name,
+                'defaultGraphParams': {
+                    'width': defaults['width'],
+                    'height': defaults['height'],
+                    'from': '-%s%s' % (defaults['quantity'], defaults['units']),
+                    'until': defaults['until'],
+                    'format': defaults['format'],
+                },
+                'refreshConfig': {
+                    'interval': defaults['interval'],
+                    'enabled': defaults['enabled'],
+                },
+                'graphs': list(),
+                'timeConfig': {
+                    'startDate': today,
+                    'endDate': today,
+                    'startTime': defaults['startTime'],
+                    'endTime': defaults['endTime'],
+                    'quantity': defaults['quantity'],
+                    'type': defaults['type'],
+                    'units': defaults['units'],
 #
 # seems that the new time handling is less than complete
 #
@@ -64,73 +67,36 @@ def dash_create(host, host_path, profile):
 #                'relativeStartQuantity': defaults['relativeStartQuantity'],
 #                'relativeUntilUnits': defaults['relativeUntilUnits'],
 #                'relativeUntilQuantity': defaults['relativeUntilQuantity'],
-            },
-            'graphSize': {
-                'width': defaults['width'],
-                'height': defaults['height'],
-            },
-            }
-    dash['graphs'] = graph_create(host, host_path)
-    return dash
+                },
+                'graphSize': {
+                    'width': defaults['width'],
+                    'height': defaults['height'],
+                },
+                }
+        dash['graphs'] = graph_create(dash_name)
+        dashs.append(dash)
+    return dashs
 
-
-def graph_create(host, host_path):
+def graph_create(dash_name):
     """Create graph for specified host and dashboard profile."""
     graphs = list()
-    for name in dash_profile['graphs']:
+    for name in dashdef[dash_name]['graphs']:
         log.info("  Graph: %s" % name)
         graph = list()
         # Skip undefined graphs
         if name not in graphdef.keys():
             log.error("%s not found in graphdef.yml" % name)
             continue
-        # Graph Type #1: Host Metrics
-        #   Identified by filesytem globbing
-        elif 'glob_verify' in graphdef[name].keys():
-            # Determine and test metric paths
-            if 'glob_metrics' in graphdef[name].keys():
-                glob_metrics = graphdef[name]['glob_metrics']
-                metric_verify = True
-            else:
-                glob_metrics = graphdef[name]['glob_verify']
-                metric_verify = False
-            metric_glob = "%s/%s" % (host_path, glob_metrics)
-            metric_paths = glob.glob(metric_glob)
-            if len(metric_paths) <= 0:
-                continue
-            metric_paths.sort()
-            for metric_path in metric_paths:
-                graph_object = dict(graphdef[name])
-                # Verify metric path
-                if metric_verify:
-                    verify_glob = "%s/%s" % (metric_path,
-                                             graphdef[name]['glob_verify'])
-                    del(graph_object['glob_metrics'])
-                else:
-                    verify_glob = metric_path
-                if len(glob.glob(verify_glob)) != 1:
-                    continue
-                del(graph_object['glob_verify'])
-                metric = os.path.basename(metric_path)
-                log.debug("    metric: %s" % metric)
-                graph = graph_compile(host, name, graph_object, metric)
-                if len(graph) > 0:
-                    graphs.append(graph)
-        # Graph Type #2: Carbon Match
-        #   Metrics reported directly by carbon server to itself
-        elif ('carbon_match' in graphdef[name].keys() and
-                graphdef[name]['carbon_match'] and
-                host == dashconf['carbon_match']):
-            graph_object = dict(graphdef[name])
-            del graph_object['carbon_match']
-            graph = graph_compile(dashconf['carbon_server'], name,
-                                  graph_object, None)
-            if len(graph) > 0:
-                graphs.append(graph)
+        
+        graph_object = dict(graphdef[name])
+        graph = graph_compile(name, graph_object, None)
+        if len(graph) > 0:
+            graphs.append(graph)
+
     return graphs
 
 
-def graph_compile(host, name, graph_object, metric):
+def graph_compile(name, graph_object, metric):
     """Finish compiling graph."""
     # Graphs consist of 3 parts
     #   1. graph_targets
@@ -143,9 +109,9 @@ def graph_compile(host, name, graph_object, metric):
     target_object = list()
     target_pairs = list()
     for template in templates:
+        template = template.replace('{domain}', dashconf['domain'])
         target = template % {'color_combined': color_combined,
                              'color_free': color_free,
-                             'host': host,
                              'metric': metric,
                              }
         target_object.append(target)
@@ -165,22 +131,23 @@ def graph_compile(host, name, graph_object, metric):
     return [graph_targets, graph_object, graph_render]
 
 
-def dash_save(dash):
+def dash_save(dashs):
     """Save dashboard using Graphite libraries."""
     # Graphite libraries
     sys.path.append(dashconf['webapp_path'])
     os.environ['DJANGO_SETTINGS_MODULE'] = "graphite.settings"
     from graphite.dashboard.models import Dashboard
 
-    dash_name = dash['name']
-    dash_state = str(json.dumps(dash))
-    try:
-        dashboard = Dashboard.objects.get(name=dash_name)
-    except Dashboard.DoesNotExist:
-        dashboard = Dashboard.objects.create(name=dash_name, state=dash_state)
-    else:
-        dashboard.state = dash_state
-        dashboard.save()
+    for dash in dashs:
+        dash_name = dash['name']
+        dash_state = str(json.dumps(dash))
+        try:
+            dashboard = Dashboard.objects.get(name=dash_name)
+        except Dashboard.DoesNotExist:
+            dashboard = Dashboard.objects.create(name=dash_name, state=dash_state)
+        else:
+            dashboard.state = dash_state
+            dashboard.save()
 
 
 def set_log_level(args):
@@ -207,15 +174,11 @@ def parser_setup():
                     help="Print copious debugging info.")
     ap.add_argument("-q", "--quiet", action="count", default=0,
                     help="Suppress output. -qq to suppress ALL output.")
-    ap.add_argument("-p", "--profile", default="all",
-                    help="Dashboard profile to load from dashdef.yml")
-    ap.add_argument(metavar="HOST", nargs="*", dest="host_globs",
-                    help="Host glob.")
     return ap
 
 
 def main():
-    global dashconf, dash_profile, graphdef
+    global dashconf, dashdef, graphdef
     # Command Line Options
     ap = parser_setup()
     args = ap.parse_args()
@@ -225,27 +188,9 @@ def main():
     dashconf = yaml.safe_load(open('%s/dashconf.yml' % args.config_dir, 'r'))
     dashdef = yaml.safe_load(open('%s/dashdef.yml' % args.config_dir, 'r'))
     graphdef = yaml.safe_load(open('%s/graphdef.yml' % args.config_dir, 'r'))
-    try:
-        dash_profile = dashdef.pop(args.profile)
-    except:
-        ap.error("Invalid dashboard PROFILE specified: '%s'\n" % args.profile)
 
-    # Build hosts list
-    host_parent_glob = "%s/%s" % (dashconf['whisper_path'],
-                                  dashconf['source_glob'])
-    host_paths = set()
-    for host_glob in args.host_globs:
-        for host_path in glob.iglob("%s/%s" % (host_parent_glob, host_glob)):
-            host_path = os.path.abspath(host_path)
-            if os.path.isdir(host_path):
-                host_paths.add(host_path)
-    host_paths = list(host_paths)
-    host_paths.sort()
-
-    for host_path in host_paths:
-        host = os.path.basename(host_path)
-        dash = dash_create(host, host_path, args.profile)
-        dash_save(dash)
+    dashs = dash_create()
+    dash_save(dashs)
 
 
 if __name__ == "__main__":

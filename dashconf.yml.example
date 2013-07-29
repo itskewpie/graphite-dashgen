@@ -1,14 +1,14 @@
 webapp_path: /opt/graphite/webapp
 whisper_path: /opt/graphite/storage/whisper
-#source_glob: collectd
+source_glob: collectd
 color_combined: 2f4f4f
 color_free: green
-#carbon_server: GRAPHITE_SERVER_FQDN
-#carbon_match: GRAPHITE_SERVER_NAME
+carbon_server: GRAPHITE_SERVER_FQDN
+carbon_match: GRAPHITE_SERVER_NAME
 
 defaults:
-    width: 800
-    height: 400
+    width: 1000
+    height: 300
     until: now
     interval: 60000
     enabled: false
@@ -16,7 +16,5 @@ defaults:
     endTime: 6:00 PM
     units: hours
     type: relative
-    quantity: 6
+    quantity: 1
     format: svg
-
-domain: pod01
