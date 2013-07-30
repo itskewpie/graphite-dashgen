@@ -22,11 +22,17 @@ summary:
     - mnodes_sda_disk_ops_read
     - mnodes_sda_disk_ops_write
   
-cnode01:
+cnode{num}:
     graphs:
-    - cnode01_load
-snode01:
+    - cnode{num}_load
+
+snode{num}:
     graphs:
-    - snode01_load
+    - snode{num}_load
+
+mnode{num}:
+    graphs:
+    - mnode{num}_load
+
     
 

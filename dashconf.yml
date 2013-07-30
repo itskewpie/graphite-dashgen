@@ -20,3 +20,9 @@ defaults:
     format: svg
 
 domain: pod01
+cnode_first: 1
+cnode_last: 16
+snode_first: 1
+snode_last: 2
+mnode_first: 2
+mnode_last: 6

@@ -38,28 +38,50 @@ def dash_create():
     dashs = list()
     # dashboard
     for dash_name in dash_names:
-        log.info("Dashboard %s" % dash_name)
-        dash = {'name': dash_name,
-                'defaultGraphParams': {
-                    'width': defaults['width'],
-                    'height': defaults['height'],
-                    'from': '-%s%s' % (defaults['quantity'], defaults['units']),
-                    'until': defaults['until'],
-                    'format': defaults['format'],
-                },
-                'refreshConfig': {
-                    'interval': defaults['interval'],
-                    'enabled': defaults['enabled'],
-                },
-                'graphs': list(),
-                'timeConfig': {
-                    'startDate': today,
-                    'endDate': today,
-                    'startTime': defaults['startTime'],
-                    'endTime': defaults['endTime'],
-                    'quantity': defaults['quantity'],
-                    'type': defaults['type'],
-                    'units': defaults['units'],
+        if dash_name == 'cnode{num}':
+            for num in range(dashconf['cnode_first'],dashconf['cnode_last']+1):
+                num = str('%02d' %num)
+                dashs.append(_dash_create(defaults, today, dash_name, num))
+        elif dash_name == 'snode{num}':
+            for num in range(dashconf['snode_first'],dashconf['snode_last']+1):
+                num = str('%02d' %num)
+                dashs.append(_dash_create(defaults, today, dash_name, num))
+        elif dash_name == 'mnode{num}':
+            for num in range(dashconf['mnode_first'],dashconf['mnode_last']+1):
+                num = str('%02d' %num)
+                dashs.append(_dash_create(defaults, today, dash_name, num))
+        else:
+            dashs.append(_dash_create(defaults, today, dash_name))
+
+    return dashs
+
+def _dash_create(defaults, today, dash_name, num=None):
+    if num:
+        display_dash_name = dash_name.replace('{num}', num)
+    else:
+        display_dash_name = dash_name
+    log.info("Dashboard %s" % display_dash_name)
+    dash = {'name': display_dash_name,
+            'defaultGraphParams': {
+                'width': defaults['width'],
+                'height': defaults['height'],
+                'from': '-%s%s' % (defaults['quantity'], defaults['units']),
+                'until': defaults['until'],
+                'format': defaults['format'],
+            },
+            'refreshConfig': {
+                'interval': defaults['interval'],
+                'enabled': defaults['enabled'],
+            },
+            'graphs': list(),
+            'timeConfig': {
+                'startDate': today,
+                'endDate': today,
+                'startTime': defaults['startTime'],
+                'endTime': defaults['endTime'],
+                'quantity': defaults['quantity'],
+                'type': defaults['type'],
+                'units': defaults['units'],
 #
 # seems that the new time handling is less than complete
 #
@@ -67,21 +89,23 @@ def dash_create():
 #                'relativeStartQuantity': defaults['relativeStartQuantity'],
 #                'relativeUntilUnits': defaults['relativeUntilUnits'],
 #                'relativeUntilQuantity': defaults['relativeUntilQuantity'],
-                },
-                'graphSize': {
-                    'width': defaults['width'],
-                    'height': defaults['height'],
-                },
-                }
-        dash['graphs'] = graph_create(dash_name)
-        dashs.append(dash)
-    return dashs
+            },
+            'graphSize': {
+                'width': defaults['width'],
+                'height': defaults['height'],
+            },
+            }
+    dash['graphs'] = graph_create(dash_name, num)
+    return dash
 
-def graph_create(dash_name):
+def graph_create(dash_name, num):
     """Create graph for specified host and dashboard profile."""
     graphs = list()
     for name in dashdef[dash_name]['graphs']:
-        log.info("  Graph: %s" % name)
+        if num:
+            log.info("  Graph: %s" % name.replace('{num}', num))
+        else:
+            log.info("  Graph: %s" % name)
         graph = list()
         # Skip undefined graphs
         if name not in graphdef.keys():
@@ -89,14 +113,14 @@ def graph_create(dash_name):
             continue
         
         graph_object = dict(graphdef[name])
-        graph = graph_compile(name, graph_object, None)
+        graph = graph_compile(name, graph_object, None, num)
         if len(graph) > 0:
             graphs.append(graph)
 
     return graphs
 
 
-def graph_compile(name, graph_object, metric):
+def graph_compile(name, graph_object, metric, num):
     """Finish compiling graph."""
     # Graphs consist of 3 parts
     #   1. graph_targets
@@ -109,6 +133,8 @@ def graph_compile(name, graph_object, metric):
     target_object = list()
     target_pairs = list()
     for template in templates:
+        if num:
+            template = template.replace('{num}', num)
         template = template.replace('{domain}', dashconf['domain'])
         target = template % {'color_combined': color_combined,
                              'color_free': color_free,
@@ -121,7 +147,10 @@ def graph_compile(name, graph_object, metric):
     if 'title' in graph_object.keys():
         graph_object['title'] = graph_object['title'] % {'metric': metric}
     else:
-        graph_object['title'] = name
+        if num:
+            graph_object['title'] = name.replace('{num}', num)
+        else:
+            graph_object['title'] = name
     graph_object['title'] = graph_object['title'].replace('-', '.')
     # build graph_render
     graph_render = "/render?%s&%s" % (urllib.urlencode(graph_object),

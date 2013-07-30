@@ -1,9 +1,13 @@
 # summary
 cnodes_load:
+    yMin: 0
+    yMax: 16
     target:
     - 'collectd.cnode*-m_{domain}.load.load.shortterm'
 
 cnodes_cpu_idle:
+    yMin: 0
+    yMax: 100
     target:
     - 'averageSeries(collectd.cnode01-m_{domain}.cpu.*.cpu.idle.value)'
     - 'averageSeries(collectd.cnode02-m_{domain}.cpu.*.cpu.idle.value)'
@@ -50,10 +54,14 @@ cnodes_sda_disk_ops_write:
     - 'collectd.cnode*-m_{domain}.disk.sda.disk_ops.write'
 
 snodes_load:
+    yMin: 0
+    yMax: 8
     target:
     - 'collectd.snode*-m_{domain}.load.load.shortterm'
 
 snodes_cpu_idle:
+    yMin: 0
+    yMax: 100
     target:
     - 'averageSeries(collectd.snode01-m_{domain}.cpu.*.cpu.idle.value)'
     - 'averageSeries(collectd.snode02-m_{domain}.cpu.*.cpu.idle.value)'
@@ -80,10 +88,14 @@ snodes_drbd0_disk_ops_write:
     - 'collectd.snode*-m_{domain}.disk.drbd0.disk_ops.write'
 
 mnodes_load:
+    yMin: 0
+    yMax: 8
     target:
     - 'collectd.mnode*-m_{domain}.load.load.shortterm'
 
 mnodes_cpu_idle:
+    yMin: 0
+    yMax: 100
     target:
     - 'averageSeries(collectd.mnode02-m_{domain}.cpu.*.cpu.idle.value)'
     - 'averageSeries(collectd.mnode03-m_{domain}.cpu.*.cpu.idle.value)'
@@ -115,11 +127,17 @@ mnodes_sda_disk_ops_write:
     target:
     - 'collectd.snode*-m_{domain}.disk.sda.disk_ops.write'
 
-# cnode01
-cnode01_load:
+# cnode
+cnode{num}_load:
     target:
-    - 'collectd.cnode01-m_{domain}.load.load.*'
+    - 'collectd.cnode{num}-m_{domain}.load.load.*'
 
-snode01_load:
+# snode
+snode{num}_load:
     target:
-    - 'collectd.snode01-m_{domain}.load.load.*'
+    - 'collectd.snode{num}-m_{domain}.load.load.*'
+
+# mnode
+mnode{num}_load:
+    target:
+    - 'collectd.mnode{num}-m_{domain}.load.load.*'
