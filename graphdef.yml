@@ -1,4 +1,4 @@
-# summary
+# summary dashboard
 cnodes_load:
     yMin: 0
     yMax: 16
@@ -127,17 +127,63 @@ mnodes_sda_disk_ops_write:
     target:
     - 'collectd.snode*-m_{domain}.disk.sda.disk_ops.write'
 
-# cnode
+# cnode dashboard
 cnode{num}_load:
     target:
     - 'collectd.cnode{num}-m_{domain}.load.load.*'
 
-# snode
+cnode{num}_cpu_used:
+    areaMode: stacked
+    target:
+    - 'averageSeries(collectd.cnode{num}-m_{domain}.cpu.*.cpu.wait.value)'
+    - 'averageSeries(collectd.cnode{num}-m_{domain}.cpu.*.cpu.user.value)'
+    - 'averageSeries(collectd.cnode{num}-m_{domain}.cpu.*.cpu.system.value)'
+
+cnode{num}_memory_used:
+    target:
+    - 'collectd.cnode{num}-m_{domain}.memory.memory.used.value'
+
+cnode{num}_swap_used:
+    target:
+    - 'collectd.cnode{num}-m_{domain}.swap.swap.used.value'
+
+# snode dashboard
 snode{num}_load:
     target:
     - 'collectd.snode{num}-m_{domain}.load.load.*'
 
-# mnode
+snode{num}_cpu_used:
+    areaMode: stacked
+    target:
+    - 'averageSeries(collectd.snode{num}-m_{domain}.cpu.*.cpu.wait.value)'
+    - 'averageSeries(collectd.snode{num}-m_{domain}.cpu.*.cpu.user.value)'
+    - 'averageSeries(collectd.snode{num}-m_{domain}.cpu.*.cpu.system.value)'
+
+snode{num}_memory_used:
+    target:
+    - 'collectd.snode{num}-m_{domain}.memory.memory.used.value'
+
+snode{num}_swap_used:
+    target:
+    - 'collectd.snode{num}-m_{domain}.swap.swap.used.value'
+
+# mnode dashboard
 mnode{num}_load:
     target:
     - 'collectd.mnode{num}-m_{domain}.load.load.*'
+
+mnode{num}_cpu_used:
+    areaMode: stacked
+    target:
+    - 'averageSeries(collectd.mnode{num}-m_{domain}.cpu.*.cpu.wait.value)'
+    - 'averageSeries(collectd.mnode{num}-m_{domain}.cpu.*.cpu.user.value)'
+    - 'averageSeries(collectd.mnode{num}-m_{domain}.cpu.*.cpu.system.value)'
+
+mnode{num}_memory_used:
+    target:
+    - 'collectd.mnode{num}-m_{domain}.memory.memory.used.value'
+
+mnode{num}_swap_used:
+    target:
+    - 'collectd.mnode{num}-m_{domain}.swap.swap.used.value'
+
