@@ -12,8 +12,8 @@ defaults:
     until: now
     interval: 60000
     enabled: false
-    startTime: 8:00 AM
-    endTime: 6:00 PM
+#    startTime: 8:00 AM
+#    endTime: 6:00 PM
     units: hours
     type: relative
     quantity: 6

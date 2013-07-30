@@ -94,7 +94,7 @@ snodes_df_root_used:
 snodes_drbd0_disk_ops_read:
     hideLegend: false
     target:
-    - 'collectd.scnode*-m_{domain}.disk.drbd0.disk_ops.read'
+    - 'collectd.snode*-m_{domain}.disk.drbd0.disk_ops.read'
 
 snodes_drbd0_disk_ops_write:
     hideLegend: false
