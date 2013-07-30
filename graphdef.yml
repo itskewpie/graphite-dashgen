@@ -2,12 +2,14 @@
 cnodes_load:
     yMin: 0
     yMax: 16
+    hideLegend: false
     target:
     - 'collectd.cnode*-m_{domain}.load.load.shortterm'
 
 cnodes_cpu_idle:
     yMin: 0
     yMax: 100
+    hideLegend: false
     target:
     - 'averageSeries(collectd.cnode01-m_{domain}.cpu.*.cpu.idle.value)'
     - 'averageSeries(collectd.cnode02-m_{domain}.cpu.*.cpu.idle.value)'
@@ -23,6 +25,7 @@ cnodes_cpu_idle:
     - 'averageSeries(collectd.cnode12-m_{domain}.cpu.*.cpu.idle.value)'
 
 cnodes_cpu_wait:
+    hideLegend: false
     target:
     - 'averageSeries(collectd.cnode01-m_{domain}.cpu.*.cpu.wait.value)'
     - 'averageSeries(collectd.cnode02-m_{domain}.cpu.*.cpu.wait.value)'
@@ -38,64 +41,77 @@ cnodes_cpu_wait:
     - 'averageSeries(collectd.cnode12-m_{domain}.cpu.*.cpu.wait.value)'
 
 cnodes_memory_used:
+    hideLegend: false
     target:
     - 'collectd.cnode*-m_{domain}.memory.memory.used.value'
 
 cnodes_df_root_used:
+    hideLegend: false
     target:
     - 'collectd.cnode*-m_{domain}.df.df.root.used'
 
 cnodes_sda_disk_ops_read:
+    hideLegend: false
     target:
     - 'collectd.cnode*-m_{domain}.disk.sda.disk_ops.read'
 
 cnodes_sda_disk_ops_write:
+    hideLegend: false
     target:
     - 'collectd.cnode*-m_{domain}.disk.sda.disk_ops.write'
 
 snodes_load:
     yMin: 0
     yMax: 8
+    hideLegend: false
     target:
     - 'collectd.snode*-m_{domain}.load.load.shortterm'
 
 snodes_cpu_idle:
     yMin: 0
     yMax: 100
+    hideLegend: false
     target:
     - 'averageSeries(collectd.snode01-m_{domain}.cpu.*.cpu.idle.value)'
     - 'averageSeries(collectd.snode02-m_{domain}.cpu.*.cpu.idle.value)'
 
 snodes_cpu_wait:
+    hideLegend: false
     target:
     - 'averageSeries(collectd.snode01-m_{domain}.cpu.*.cpu.wait.value)'
     - 'averageSeries(collectd.snode02-m_{domain}.cpu.*.cpu.wait.value)'
 
 snodes_memory_used:
+    hideLegend: false
     target:
     - 'collectd.snode*-m_{domain}.memory.memory.used.value'
 
 snodes_df_root_used:
+    hideLegend: false
     target:
     - 'collectd.snode*-m_{domain}.df.df.root.used'
 
 snodes_drbd0_disk_ops_read:
+    hideLegend: false
     target:
     - 'collectd.scnode*-m_{domain}.disk.drbd0.disk_ops.read'
 
 snodes_drbd0_disk_ops_write:
+    hideLegend: false
     target:
     - 'collectd.snode*-m_{domain}.disk.drbd0.disk_ops.write'
 
 mnodes_load:
     yMin: 0
     yMax: 8
+    hideLegend: false
     target:
     - 'collectd.mnode*-m_{domain}.load.load.shortterm'
 
 mnodes_cpu_idle:
     yMin: 0
     yMax: 100
+    hideLegend: false
     target:
     - 'averageSeries(collectd.mnode02-m_{domain}.cpu.*.cpu.idle.value)'
     - 'averageSeries(collectd.mnode03-m_{domain}.cpu.*.cpu.idle.value)'
@@ -104,6 +120,7 @@ mnodes_cpu_idle:
     - 'averageSeries(collectd.mnode06-m_{domain}.cpu.*.cpu.idle.value)'
 
 mnodes_cpu_wait:
+    hideLegend: false
     target:
     - 'averageSeries(collectd.mnode02-m_{domain}.cpu.*.cpu.wait.value)'
     - 'averageSeries(collectd.mnode03-m_{domain}.cpu.*.cpu.wait.value)'
@@ -112,18 +129,22 @@ mnodes_cpu_wait:
     - 'averageSeries(collectd.mnode06-m_{domain}.cpu.*.cpu.wait.value)'
 
 mnodes_memory_used:
+    hideLegend: false
     target:
     - 'collectd.mnode*-m_{domain}.memory.memory.used.value'
 
 mnodes_df_root_used:
+    hideLegend: false
     target:
     - 'collectd.mnode*-m_{domain}.df.df.root.used'
 
 mnodes_sda_disk_ops_read:
+    hideLegend: false
     target:
     - 'collectd.snode*-m_{domain}.disk.sda.disk_ops.read'
 
 mnodes_sda_disk_ops_write:
+    hideLegend: false
     target:
     - 'collectd.snode*-m_{domain}.disk.sda.disk_ops.write'
 
