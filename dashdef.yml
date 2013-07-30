@@ -25,14 +25,23 @@ summary:
 cnode{num}:
     graphs:
     - cnode{num}_load
+    - cnode{num}_cpu_used
+    - cnode{num}_memory_used
+    - cnode{num}_swap_used
 
 snode{num}:
     graphs:
     - snode{num}_load
+    - snode{num}_cpu_used
+    - snode{num}_memory_used
+    - snode{num}_swap_used
 
 mnode{num}:
     graphs:
     - mnode{num}_load
+    - mnode{num}_cpu_used
+    - mnode{num}_memory_used
+    - mnode{num}_swap_used
 
     
 
