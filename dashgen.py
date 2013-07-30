@@ -77,8 +77,8 @@ def _dash_create(defaults, today, dash_name, num=None):
             'timeConfig': {
                 'startDate': today,
                 'endDate': today,
-                'startTime': defaults['startTime'],
-                'endTime': defaults['endTime'],
+#                'startTime': defaults['startTime'],
+#                'endTime': defaults['endTime'],
                 'quantity': defaults['quantity'],
                 'type': defaults['type'],
                 'units': defaults['units'],
