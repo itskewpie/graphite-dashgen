@@ -135,7 +135,10 @@ def graph_compile(name, graph_object, metric, num):
     for template in templates:
         if num:
             template = template.replace('{num}', num)
-        template = template.replace('{domain}', dashconf['domain'])
+        if template.find('mgmt_domain') == -1:
+            template = template.replace('{domain}', dashconf['domain'])
+        else:
+            template = template.replace('{mgmt_domain}', dashconf['mgmt_domain'])
         target = template % {'color_combined': color_combined,
                              'color_free': color_free,
                              'metric': metric,

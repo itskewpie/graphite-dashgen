@@ -106,47 +106,47 @@ mnodes_load:
     yMax: 8
     hideLegend: false
     target:
-    - 'collectd.mnode*-m_{domain}.load.load.shortterm'
+    - 'collectd.mnode*-m_{mgmt_domain}.load.load.shortterm'
 
 mnodes_cpu_idle:
     yMin: 0
     yMax: 100
     hideLegend: false
     target:
-    - 'averageSeries(collectd.mnode02-m_{domain}.cpu.*.cpu.idle.value)'
-    - 'averageSeries(collectd.mnode03-m_{domain}.cpu.*.cpu.idle.value)'
-    - 'averageSeries(collectd.mnode04-m_{domain}.cpu.*.cpu.idle.value)'
-    - 'averageSeries(collectd.mnode05-m_{domain}.cpu.*.cpu.idle.value)'
-    - 'averageSeries(collectd.mnode06-m_{domain}.cpu.*.cpu.idle.value)'
+    - 'averageSeries(collectd.mnode02-m_{mgmt_domain}.cpu.*.cpu.idle.value)'
+    - 'averageSeries(collectd.mnode03-m_{mgmt_domain}.cpu.*.cpu.idle.value)'
+    - 'averageSeries(collectd.mnode04-m_{mgmt_domain}.cpu.*.cpu.idle.value)'
+    - 'averageSeries(collectd.mnode05-m_{mgmt_domain}.cpu.*.cpu.idle.value)'
+    - 'averageSeries(collectd.mnode06-m_{mgmt_domain}.cpu.*.cpu.idle.value)'
 
 mnodes_cpu_wait:
     hideLegend: false
     target:
-    - 'averageSeries(collectd.mnode02-m_{domain}.cpu.*.cpu.wait.value)'
-    - 'averageSeries(collectd.mnode03-m_{domain}.cpu.*.cpu.wait.value)'
-    - 'averageSeries(collectd.mnode04-m_{domain}.cpu.*.cpu.wait.value)'
-    - 'averageSeries(collectd.mnode05-m_{domain}.cpu.*.cpu.wait.value)'
-    - 'averageSeries(collectd.mnode06-m_{domain}.cpu.*.cpu.wait.value)'
+    - 'averageSeries(collectd.mnode02-m_{mgmt_domain}.cpu.*.cpu.wait.value)'
+    - 'averageSeries(collectd.mnode03-m_{mgmt_domain}.cpu.*.cpu.wait.value)'
+    - 'averageSeries(collectd.mnode04-m_{mgmt_domain}.cpu.*.cpu.wait.value)'
+    - 'averageSeries(collectd.mnode05-m_{mgmt_domain}.cpu.*.cpu.wait.value)'
+    - 'averageSeries(collectd.mnode06-m_{mgmt_domain}.cpu.*.cpu.wait.value)'
 
 mnodes_memory_used:
     hideLegend: false
     target:
-    - 'collectd.mnode*-m_{domain}.memory.memory.used.value'
+    - 'collectd.mnode*-m_{mgmt_domain}.memory.memory.used.value'
 
 mnodes_df_root_used:
     hideLegend: false
     target:
-    - 'collectd.mnode*-m_{domain}.df.df.root.used'
+    - 'collectd.mnode*-m_{mgmt_domain}.df.df.root.used'
 
 mnodes_sda_disk_ops_read:
     hideLegend: false
     target:
-    - 'collectd.snode*-m_{domain}.disk.sda.disk_ops.read'
+    - 'collectd.snode*-m_{mgmt_domain}.disk.sda.disk_ops.read'
 
 mnodes_sda_disk_ops_write:
     hideLegend: false
     target:
-    - 'collectd.snode*-m_{domain}.disk.sda.disk_ops.write'
+    - 'collectd.snode*-m_{mgmt_domain}.disk.sda.disk_ops.write'
 
 # cnode dashboard
 cnode{num}_load:
@@ -191,20 +191,20 @@ snode{num}_swap_used:
 # mnode dashboard
 mnode{num}_load:
     target:
-    - 'collectd.mnode{num}-m_{domain}.load.load.*'
+    - 'collectd.mnode{num}-m_{mgmt_domain}.load.load.*'
 
 mnode{num}_cpu_used:
     areaMode: stacked
     target:
-    - 'averageSeries(collectd.mnode{num}-m_{domain}.cpu.*.cpu.wait.value)'
-    - 'averageSeries(collectd.mnode{num}-m_{domain}.cpu.*.cpu.user.value)'
-    - 'averageSeries(collectd.mnode{num}-m_{domain}.cpu.*.cpu.system.value)'
+    - 'averageSeries(collectd.mnode{num}-m_{mgmt_domain}.cpu.*.cpu.wait.value)'
+    - 'averageSeries(collectd.mnode{num}-m_{mgmt_domain}.cpu.*.cpu.user.value)'
+    - 'averageSeries(collectd.mnode{num}-m_{mgmt_domain}.cpu.*.cpu.system.value)'
 
 mnode{num}_memory_used:
     target:
-    - 'collectd.mnode{num}-m_{domain}.memory.memory.used.value'
+    - 'collectd.mnode{num}-m_{mgmt_domain}.memory.memory.used.value'
 
 mnode{num}_swap_used:
     target:
-    - 'collectd.mnode{num}-m_{domain}.swap.swap.used.value'
+    - 'collectd.mnode{num}-m_{mgmt_domain}.swap.swap.used.value'
 

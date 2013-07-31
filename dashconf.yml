@@ -20,8 +20,9 @@ defaults:
     format: svg
 
 domain: pod01
+mgmt_domain: mgmt1
 cnode_first: 1
-cnode_last: 16
+cnode_last: 12
 snode_first: 1
 snode_last: 2
 mnode_first: 2
